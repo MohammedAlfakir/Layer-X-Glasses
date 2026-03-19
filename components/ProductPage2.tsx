@@ -102,7 +102,7 @@ export default function ProductPage2({
           <button
             ref={addToCartBtnRef}
             onClick={handleAddToCart}
-            className="flex items-center gap-3 border border-[#444] text-[#cbb592] rounded-full px-7 py-3 text-[11px] tracking-widest hover:bg-[#cbb592]/10 transition-colors bg-transparent self-start"
+            className="flex items-center gap-3 border border-[#444] text-[#cbb592] rounded-full px-7 py-3 text-[11px] tracking-widest hover:bg-[#cbb592]/10 transition-colors bg-transparent self-start cursor-pointer"
           >
             <svg
               className="w-4 h-4 fill-none stroke-current"
@@ -116,7 +116,7 @@ export default function ProductPage2({
                 d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"
               />
             </svg>
-            ADD TO CART
+            Add to Cart
           </button>
         </div>
 

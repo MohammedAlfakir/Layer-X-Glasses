@@ -120,7 +120,7 @@ export default function ProductPage1({
             <button
               ref={addToCartBtnRef}
               onClick={handleAddToCart}
-              className="border border-[#444] text-[#a28f73] rounded-full px-8 py-3 text-[11px] tracking-wider hover:bg-[#B69D74]/10 transition-colors bg-transparent"
+              className="border border-[#444] text-[#a28f73] rounded-full px-8 py-3 text-[11px] tracking-wider hover:bg-[#B69D74]/10 transition-colors bg-transparent cursor-pointer"
             >
               Add to Cart
             </button>
