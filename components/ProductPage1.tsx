@@ -1,14 +1,35 @@
 "use client";
 
+import { useRef } from "react";
 import { Michroma } from "next/font/google";
+import { useCart } from "@/context/CartContext";
+import { useLightTrailAnimation } from "@/hooks/useLightTrailAnimation";
 
 const techFont = Michroma({ weight: "400", subsets: ["latin"] });
 
+const LAYER_X_PRODUCT = {
+  id: "layer-x-glasses",
+  name: "LAYER-X",
+  subtitle: "Neural Interface Glasses",
+  price: 100,
+  image: "/resources/LAYER-X.png",
+};
+
 interface ProductPage1Props {
   onNext: () => void;
+  cartIconRef: React.RefObject<HTMLButtonElement | null>;
 }
 
-export default function ProductPage1({ onNext }: ProductPage1Props) {
+export default function ProductPage1({ onNext, cartIconRef }: ProductPage1Props) {
+  const { addItem, openCart, totalItems } = useCart();
+  const { fire } = useLightTrailAnimation();
+  const addToCartBtnRef = useRef<HTMLButtonElement>(null);
+
+  const handleAddToCart = () => {
+    addItem(LAYER_X_PRODUCT);
+    fire(addToCartBtnRef.current, cartIconRef.current, undefined);
+  };
+
   return (
     <div
       className={`min-h-screen bg-black text-[#cbb592] p-8 md:p-16 flex flex-col justify-between overflow-hidden relative ${techFont.className}`}
@@ -28,6 +49,22 @@ export default function ProductPage1({ onNext }: ProductPage1Props) {
       <div className="absolute top-16 right-16 hidden md:flex items-center gap-6 text-[10px] tracking-[0.2em] text-[#887455] z-10">
         <span>1/2</span>
         <div className="w-32 h-px bg-[#333]"></div>
+        {/* Cart icon */}
+        <button
+          ref={cartIconRef as React.RefObject<HTMLButtonElement>}
+          onClick={openCart}
+          className="relative text-[#887455] hover:text-[#cbb592] transition-colors"
+          aria-label="Open cart"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+          </svg>
+          {totalItems > 0 && (
+            <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#cbb592] text-black text-[9px] flex items-center justify-center font-bold">
+              {totalItems}
+            </span>
+          )}
+        </button>
         <button
           onClick={onNext}
           className="text-[#a08a65] hover:text-[#cbb592] transition-colors cursor-pointer uppercase tracking-[0.2em] text-[10px] bg-transparent border-none"
@@ -66,7 +103,11 @@ export default function ProductPage1({ onNext }: ProductPage1Props) {
               <br />
               frame for comfort and clarity.
             </p>
-            <button className="border border-[#444] text-[#a28f73] rounded-full px-8 py-3 text-[11px] tracking-wider hover:bg-[#B69D74]/10 transition-colors bg-transparent">
+            <button
+              ref={addToCartBtnRef}
+              onClick={handleAddToCart}
+              className="border border-[#444] text-[#a28f73] rounded-full px-8 py-3 text-[11px] tracking-wider hover:bg-[#B69D74]/10 transition-colors bg-transparent"
+            >
               Add to Cart
             </button>
           </div>
@@ -95,9 +136,7 @@ export default function ProductPage1({ onNext }: ProductPage1Props) {
                 </div>
                 <div className="flex justify-between py-4">
                   <span className="text-[#887455]">Build</span>
-                  <span className="text-[#cbb592]">
-                    Lightweight Impact Shell
-                  </span>
+                  <span className="text-[#cbb592]">Lightweight Impact Shell</span>
                 </div>
               </div>
             </div>
