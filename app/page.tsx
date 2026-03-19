@@ -1,138 +1,109 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import gsap from "gsap";
 import { Michroma } from "next/font/google";
 import LoadingScreen from "@/components/LoadingScreen";
+import ProductPage1 from "@/components/ProductPage1";
+import ProductPage2 from "@/components/ProductPage2";
 
 const techFont = Michroma({ weight: "400", subsets: ["latin"] });
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const panelTopRef = useRef<HTMLDivElement>(null);
+  const panelBottomRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+
+  const navigate = (targetPage: number) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    const top = panelTopRef.current;
+    const bottom = panelBottomRef.current;
+    const line = lineRef.current;
+    if (!top || !bottom || !line) return;
+
+    // Reset: panels off-screen, line invisible
+    gsap.set(top, { yPercent: -100, display: "block" });
+    gsap.set(bottom, { yPercent: 100, display: "block" });
+    gsap.set(line, { scaleX: 0, display: "block", opacity: 1 });
+
+    const tl = gsap.timeline({
+      onComplete: () => setIsTransitioning(false),
+    });
+
+    // Phase 1: Panels slide in from top + bottom simultaneously (0.55s)
+    tl.to(top, { yPercent: 0, duration: 0.55, ease: "power3.inOut" }, 0);
+    tl.to(bottom, { yPercent: 0, duration: 0.55, ease: "power3.inOut" }, 0);
+
+    // Phase 2: Gold seam line sweeps across center as panels meet (~0.3s delay)
+    tl.to(
+      line,
+      { scaleX: 1, duration: 0.35, ease: "power2.out" },
+      0.35
+    );
+
+    // Phase 3: Switch page when fully covered
+    tl.call(() => setCurrentPage(targetPage), undefined, 0.6);
+
+    // Phase 4: Line fades out
+    tl.to(line, { opacity: 0, duration: 0.15, ease: "none" }, 0.65);
+
+    // Phase 5: Panels split and slam out
+    tl.to(top, { yPercent: -100, duration: 0.5, ease: "power3.inOut" }, 0.7);
+    tl.to(bottom, { yPercent: 100, duration: 0.5, ease: "power3.inOut" }, 0.7);
+
+    // Hide panels after animation
+    tl.set([top, bottom, line], { display: "none" });
+  };
 
   return (
-    <>
+    <div className={`relative ${techFont.className}`}>
+      {/* Top panel — pure black */}
+      <div
+        ref={panelTopRef}
+        className="fixed top-0 left-0 right-0 h-1/2 bg-black z-[9998] hidden"
+      />
+
+      {/* Bottom panel — pure black */}
+      <div
+        ref={panelBottomRef}
+        className="fixed bottom-0 left-0 right-0 h-1/2 bg-black z-[9998] hidden"
+      />
+
+      {/* Gold seam line at vertical center */}
+      <div
+        ref={lineRef}
+        className="fixed left-0 right-0 z-[9999] hidden"
+        style={{
+          top: "50%",
+          height: "1px",
+          transformOrigin: "left center",
+          background:
+            "linear-gradient(90deg, transparent 0%, #cbb592 20%, #e8d5a8 50%, #cbb592 80%, transparent 100%)",
+          boxShadow: "0 0 12px 2px rgba(203, 181, 146, 0.6)",
+        }}
+      />
+
+      {/* Loading screen */}
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
 
+      {/* Page content */}
       <div
-        className={`min-h-screen bg-black text-[#cbb592] p-8 md:p-16 flex flex-col justify-between overflow-hidden relative ${techFont.className}`}
         style={{
           opacity: isLoading ? 0 : 1,
           transition: "opacity 0.5s ease-out",
         }}
       >
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-lighten"
-        >
-          <source src="/resources/heroVideo.mp4" type="video/mp4" />
-        </video>
-
-        {/* Top right floating Header */}
-        <div className="absolute top-16 right-16 hidden md:flex items-center gap-6 text-[10px] tracking-[0.2em] text-[#887455] z-10">
-          <span>1/3</span>
-          <div className="w-32 h-[1px] bg-[#333]"></div>
-          <span className="text-[#a08a65]">NEXT PRODUCT</span>
-        </div>
-
-        {/* Main Grid container */}
-        <div className="max-w-[1400px] w-full mx-auto flex flex-col md:flex-row justify-between h-full gap-8 md:gap-16 pt-12 md:pt-24 flex-1 relative z-10">
-          {/* Left Column */}
-          <div className="flex flex-col justify-between w-full md:w-1/2 max-w-xl relative">
-            <div className="flex flex-col gap-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-wide uppercase text-[#cbb592]">
-                LAYER-X //
-                <br />
-                NEURAL
-                <br />
-                INTERFACE
-              </h1>
-
-              <p className="font-sans text-[#a28f73] text-[13px] max-w-[22rem] leading-relaxed tracking-wide">
-                Engineered for the LAYER-X glasses, an ultra-lightweight frame
-                for users who don&apos;t just view the AR world—they own it.
-                Shift reality.
-              </p>
-            </div>
-
-            {/* Bottom Left: Add to cart card */}
-            <div className="mt-16 sm:mt-auto border border-[#2a2a2a] rounded-[2rem] p-8 max-w-[26rem] bg-black relative max-h-min mb-4">
-              <h3 className="text-[10px] font-bold tracking-[0.2em] mb-4 text-[#cbb592] uppercase">
-                MS-01: NEURAL CORE
-              </h3>
-              <p className="font-sans text-[#998668] text-[12px] mb-8 leading-relaxed">
-                High-resolution optics and a light
-                <br />
-                frame for comfort and clarity.
-              </p>
-              <button className="border border-[#444] text-[#a28f73] rounded-full px-8 py-3 text-[11px] tracking-wider hover:bg-[#B69D74]/10 transition-colors bg-transparent">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="flex flex-col justify-between w-full md:w-1/2 relative pb-8 md:pb-4">
-            <div className="flex-1 flex flex-col justify-center w-full max-w-[28rem] self-end mt-16 md:mt-0">
-              {/* Middle Right: Technical Specs */}
-              <div className="w-full">
-                <h3 className="text-[11px] tracking-[0.2em] mb-8 font-bold text-[#cbb592]">
-                  TECHNICAL SPECS
-                </h3>
-                <div className="flex flex-col font-sans text-[12px] tracking-wide border-t border-b border-[#222] divide-y divide-[#222]">
-                  <div className="flex justify-between py-4">
-                    <span className="text-[#887455]">Optics</span>
-                    <span className="text-[#cbb592]">Dual 8K Micro-OLED</span>
-                  </div>
-                  <div className="flex justify-between py-4">
-                    <span className="text-[#887455]">Logic</span>
-                    <span className="text-[#cbb592]">R1 - Neural Engine</span>
-                  </div>
-                  <div className="flex justify-between py-4">
-                    <span className="text-[#887455]">Motion</span>
-                    <span className="text-[#cbb592]">144Hz Low-Latency</span>
-                  </div>
-                  <div className="flex justify-between py-4">
-                    <span className="text-[#887455]">Build</span>
-                    <span className="text-[#cbb592]">
-                      Lightweight Impact Shell
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Right: Pills */}
-            <div className="flex flex-wrap items-center justify-end gap-3 sm:gap-5 text-[9px] sm:text-[10px] tracking-[0.2em] font-normal text-[#998668] mt-auto self-end">
-              <div className="px-1 hover:text-[#cbb592] cursor-pointer transition-colors">
-                8K RAW
-              </div>
-              <div className="w-9 h-9 flex items-center justify-center border border-[#333] rounded-full hover:text-[#cbb592] hover:border-[#555] cursor-pointer transition-all">
-                A+
-              </div>
-              <div className="px-1 hover:text-[#cbb592] cursor-pointer transition-colors">
-                ULTRA-WIDE
-              </div>
-
-              <div className="flex items-center gap-2 group cursor-pointer border border-[#333] rounded-full pr-1 pl-5 py-1.5 hover:border-[#555] transition-all">
-                <span className="group-hover:text-[#cbb592] transition-colors">
-                  NEURAL-SYNC
-                </span>
-                <svg
-                  className="w-6 h-6 text-[#998668] group-hover:text-[#cbb592] fill-current"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M12 2L13.8 9.5L21.3 11.3L13.8 13.1L12 20.6L10.2 13.1L2.7 11.3L10.2 9.5L12 2Z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
+        {currentPage === 0 ? (
+          <ProductPage1 onNext={() => navigate(1)} />
+        ) : (
+          <ProductPage2 onPrev={() => navigate(0)} />
+        )}
       </div>
-    </>
+    </div>
   );
 }
