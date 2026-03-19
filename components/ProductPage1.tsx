@@ -32,7 +32,7 @@ export default function ProductPage1({ onNext }: ProductPage1Props) {
           onClick={onNext}
           className="text-[#a08a65] hover:text-[#cbb592] transition-colors cursor-pointer uppercase tracking-[0.2em] text-[10px] bg-transparent border-none"
         >
-          NEXT PRODUCT
+          NEXT
         </button>
       </div>
 
@@ -105,26 +105,17 @@ export default function ProductPage1({ onNext }: ProductPage1Props) {
 
           {/* Bottom Right: Pills */}
           <div className="flex flex-wrap items-center justify-end gap-3 sm:gap-5 text-[9px] sm:text-[10px] tracking-[0.2em] font-normal text-[#998668] mt-auto self-end">
-            <div className="px-1 hover:text-[#cbb592] cursor-pointer transition-colors">
+            <div className="px-1 hover:text-[#cbb592] transition-colors">
               8K RAW
             </div>
-            <div className="w-9 h-9 flex items-center justify-center border border-[#333] rounded-full hover:text-[#cbb592] hover:border-[#555] cursor-pointer transition-all">
+            <div className="w-9 h-9 flex items-center justify-center border border-[#333] rounded-full hover:text-[#cbb592] hover:border-[#555] transition-all">
               A+
             </div>
-            <div className="px-1 hover:text-[#cbb592] cursor-pointer transition-colors">
+            <div className="px-1 hover:text-[#cbb592] transition-colors">
               ULTRA-WIDE
             </div>
-            <div className="flex items-center gap-2 group cursor-pointer border border-[#333] rounded-full pr-1 pl-5 py-1.5 hover:border-[#555] transition-all">
-              <span className="group-hover:text-[#cbb592] transition-colors">
-                NEURAL-SYNC
-              </span>
-              <svg
-                className="w-6 h-6 text-[#998668] group-hover:text-[#cbb592] fill-current"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path d="M12 2L13.8 9.5L21.3 11.3L13.8 13.1L12 20.6L10.2 13.1L2.7 11.3L10.2 9.5L12 2Z" />
-              </svg>
+            <div className="flex items-center border border-[#333] rounded-full px-2 py-1 hover:border-[#555] transition-all">
+              NEURAL-SYNC
             </div>
           </div>
         </div>

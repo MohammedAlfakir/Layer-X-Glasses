@@ -32,7 +32,7 @@ export default function ProductPage2({ onPrev }: ProductPage2Props) {
           onClick={onPrev}
           className="text-[#a08a65] hover:text-[#cbb592] transition-colors cursor-pointer uppercase tracking-[0.2em] text-[10px] bg-transparent border-none"
         >
-          PREV PRODUCT
+          PREV
         </button>
       </div>
 
