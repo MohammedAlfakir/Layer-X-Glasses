@@ -69,6 +69,16 @@ export default function Home() {
           }}
         />
 
+        {/* Preload both videos simultaneously so page 2 is already buffered */}
+        <div className="hidden" aria-hidden="true">
+          <video preload="auto" muted playsInline>
+            <source src="/resources/heroVideo.mp4" type="video/mp4" />
+          </video>
+          <video preload="auto" muted playsInline>
+            <source src="/resources/heroVideoTwo.mp4" type="video/mp4" />
+          </video>
+        </div>
+
         {/* Loading screen */}
         {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
 
