@@ -20,14 +20,17 @@ interface ProductPage2Props {
   cartIconRef: React.RefObject<HTMLButtonElement | null>;
 }
 
-export default function ProductPage2({ onPrev, cartIconRef }: ProductPage2Props) {
+export default function ProductPage2({
+  onPrev,
+  cartIconRef,
+}: ProductPage2Props) {
   const { addItem, openCart, totalItems } = useCart();
   const { fire } = useLightTrailAnimation();
-  const shopNowBtnRef = useRef<HTMLButtonElement>(null);
+  const addToCartBtnRef = useRef<HTMLButtonElement>(null);
 
-  const handleShopNow = () => {
+  const handleAddToCart = () => {
     addItem(LAYER_X_PRODUCT);
-    fire(shopNowBtnRef.current, cartIconRef.current, () => openCart());
+    fire(addToCartBtnRef.current, cartIconRef.current);
   };
 
   return (
@@ -49,27 +52,39 @@ export default function ProductPage2({ onPrev, cartIconRef }: ProductPage2Props)
       <div className="absolute top-16 right-16 hidden md:flex items-center gap-6 text-[10px] tracking-[0.2em] text-[#887455] z-10">
         <span>2/2</span>
         <div className="w-32 h-px bg-[#333]"></div>
+
+        <button
+          onClick={onPrev}
+          className="text-[#a08a65] hover:text-[#cbb592] transition-colors cursor-pointer uppercase tracking-[0.2em] text-[10px] bg-transparent border-none"
+        >
+          PREV
+        </button>
+
         {/* Cart icon */}
         <button
           ref={cartIconRef as React.RefObject<HTMLButtonElement>}
           onClick={openCart}
-          className="relative text-[#887455] hover:text-[#cbb592] transition-colors"
+          className="relative text-[#887455] hover:text-[#cbb592] transition-colors cursor-pointer"
           aria-label="Open cart"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"
+            />
           </svg>
           {totalItems > 0 && (
             <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#cbb592] text-black text-[9px] flex items-center justify-center font-bold">
               {totalItems}
             </span>
           )}
-        </button>
-        <button
-          onClick={onPrev}
-          className="text-[#a08a65] hover:text-[#cbb592] transition-colors cursor-pointer uppercase tracking-[0.2em] text-[10px] bg-transparent border-none"
-        >
-          PREV
         </button>
       </div>
 
@@ -85,8 +100,8 @@ export default function ProductPage2({ onPrev, cartIconRef }: ProductPage2Props)
 
           {/* Shop Now button */}
           <button
-            ref={shopNowBtnRef}
-            onClick={handleShopNow}
+            ref={addToCartBtnRef}
+            onClick={handleAddToCart}
             className="flex items-center gap-3 border border-[#444] text-[#cbb592] rounded-full px-7 py-3 text-[11px] tracking-widest hover:bg-[#cbb592]/10 transition-colors bg-transparent self-start"
           >
             <svg
@@ -101,7 +116,7 @@ export default function ProductPage2({ onPrev, cartIconRef }: ProductPage2Props)
                 d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"
               />
             </svg>
-            SHOP NOW
+            ADD TO CART
           </button>
         </div>
 
