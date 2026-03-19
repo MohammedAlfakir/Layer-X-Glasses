@@ -3,11 +3,10 @@
 import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Instrument_Serif } from "next/font/google";
+import { Michroma } from "next/font/google";
 
-const instrumentSerif = Instrument_Serif({
+const techFont = Michroma({
   weight: "400",
-  style: "italic",
   subsets: ["latin"],
 });
 
@@ -52,12 +51,12 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       tl.to(
         portfolioRef.current,
         { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-        0.1
+        0.1,
       );
       tl.to(
         counterRef.current,
         { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-        0.1
+        0.1,
       );
 
       // Progress Bar (linear scale up over 2.7s)
@@ -68,7 +67,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           duration: 2.7,
           ease: "none",
         },
-        0
+        0,
       );
 
       // Counter (0 to 100 over exactly 2.7s)
@@ -83,7 +82,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             setCounter(Math.round(proxy.val));
           },
         },
-        0
+        0,
       );
 
       // Words Sequence Frame
@@ -91,31 +90,31 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       tl.to(
         word1Ref.current,
         { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
-        0.0 // 0.0s -> "Design" appears
+        0.0, // 0.0s -> "Design" appears
       );
       tl.to(
         word1Ref.current,
         { opacity: 0, y: -20, duration: 0.4, ease: "power2.out" },
-        0.5 // starts moving out so it's gone by 0.9
+        0.5, // starts moving out so it's gone by 0.9
       );
 
       // Word 2: Create
       tl.to(
         word2Ref.current,
         { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
-        0.9 // 0.9s -> "Create" replaces it
+        0.9, // 0.9s -> "Create" replaces it
       );
       tl.to(
         word2Ref.current,
         { opacity: 0, y: -20, duration: 0.4, ease: "power2.out" },
-        1.4
+        1.4,
       );
 
       // Word 3: Inspire
       tl.to(
         word3Ref.current,
         { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
-        1.8 // 1.8s -> "Inspire" replaces it
+        1.8, // 1.8s -> "Inspire" replaces it
       );
       // Doesn't animate out according to prompt
 
@@ -130,51 +129,50 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           delay: 0.4,
           onComplete: () => onCompleteRef.current(),
         },
-        2.7
+        2.7,
       );
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 z-[9999] bg-[#0a0a0a]"
-    >
+    <div ref={containerRef} className="fixed inset-0 z-[9999] bg-[#0a0a0a]">
       {/* Portfolio Label */}
       <div
         ref={portfolioRef}
         className="absolute top-8 left-8 md:top-12 md:left-12 text-xs md:text-sm text-[#888888] uppercase tracking-[0.3em] font-sans"
       >
-        Portfolio
+        LAYER-X
       </div>
 
       {/* Rotating Words */}
-      <div className={`absolute inset-0 flex items-center justify-center ${instrumentSerif.className}`}>
+      <div
+        className={`absolute inset-0 flex items-center justify-center ${techFont.className}`}
+      >
         <span
           ref={word1Ref}
-          className="absolute text-4xl md:text-6xl lg:text-7xl italic text-[#f5f5f5]/80"
+          className="absolute text-2xl md:text-4xl lg:text-5xl italic text-[#f5f5f5]/80"
         >
-          Design
+          Vision
         </span>
         <span
           ref={word2Ref}
-          className="absolute text-4xl md:text-6xl lg:text-7xl italic text-[#f5f5f5]/80"
+          className="absolute text-2xl md:text-4xl lg:text-5xl italic text-[#f5f5f5]/80"
         >
-          Create
+          Style
         </span>
         <span
           ref={word3Ref}
-          className="absolute text-4xl md:text-6xl lg:text-7xl italic text-[#f5f5f5]/80"
+          className="absolute text-2xl md:text-4xl lg:text-5xl italic text-[#f5f5f5]/80"
         >
-          Inspire
+          Inspiration
         </span>
       </div>
 
       {/* Counter */}
       <div
         ref={counterRef}
-        className={`absolute bottom-8 right-8 md:bottom-12 md:right-12 text-6xl md:text-8xl lg:text-9xl text-[#f5f5f5] tabular-nums ${instrumentSerif.className}`}
+        className={`absolute bottom-8 right-8 md:bottom-12 md:right-12 text-4xl md:text-8xl lg:text-7xl text-[#f5f5f5] tabular-nums ${techFont.className}`}
       >
         {counter.toString().padStart(3, "0")}
       </div>
